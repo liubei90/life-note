@@ -1,0 +1,36 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.day-note {
+  padding: 30rpx;
+}
+
+.day-note-day {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.day-note-greetings {
+  font-size: 26px;
+  font-weight: 500;
+}
+
+.day-note-info {
+  margin-top: 60rpx;
+  border-left: 6rpx solid gray;
+  padding: 20rpx 20rpx 20rpx 30rpx;
+  font-size: 16px;
+  color: gray;
+  line-height: 2em;
+}
+
+.day-note-note {
+
+}
+
+.day-note-origin {
+  text-align: right;
+}
