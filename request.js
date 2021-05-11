@@ -6,9 +6,14 @@ function getNotes() {
       url: api.note_md,
       success: (res) => {
         console.log(res);
+        if (res.statusCode == 200) {
+          resolve(res.data);
+        } else {
+          reject();
+        }
       },
       fail: () => {
-        ;
+        reject();
       },
     });
 

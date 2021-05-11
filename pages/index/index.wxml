@@ -1,11 +1,15 @@
 <!--index.wxml-->
 <view class="container">
-  <view wx:if="{{ dayNote }}" class="day-note">
-    <view class="day-note-day">{{ dayNote.day }}</view>
-    <view class="day-note-greetings">{{ dayNote.greetings }}</view>
-    <view class="day-note-info">
-      <view class="day-note-note">{{ dayNote.note }}</view>
-      <view class="day-note-origin">-{{ dayNote.origin }}</view>
+  <block wx:for="{{dayNotes}}">
+    <view class="day-note">
+      <view class="day-note-day">{{ item.day }}</view>
+      <view class="day-note-greetings">{{ item.greetings }}</view>
+      <view class="day-note-info">
+        <block wx:if="{{ item.note && item.note.length }}">
+          <view class="day-note-note" wx:for="{{ item.note }}" wx:for-item="noteItem">{{ noteItem }}</view>
+        </block>
+        <view class="day-note-origin">-{{ item.origin }}</view>
+      </view>
     </view>
-  </view>
+  </block>
 </view>
