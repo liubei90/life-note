@@ -15,9 +15,9 @@ Page({
   },
   onLoad() {
     getNotes().then((res) => {
-      this.setData({
-        dayNote: this.processNotes(res)[0],
-      });
+      // this.setData({
+        // dayNote: this.processNotes(res)[0],
+      // });
     })
   },
 
