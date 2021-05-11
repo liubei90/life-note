@@ -2,6 +2,7 @@
 // 获取应用实例
 const app = getApp();
 const { getNotes } = require('../../request.js');
+const marked = require("marked");
 
 
 Page({
