@@ -1,15 +1,23 @@
 <!--index.wxml-->
-<view class="container">
-  <block wx:for="{{dayNotes}}">
-    <view class="day-note">
-      <view class="day-note-day">{{ item.day }}</view>
-      <view class="day-note-greetings">{{ item.greetings }}</view>
-      <view class="day-note-info">
-        <block wx:if="{{ item.note && item.note.length }}">
-          <view class="day-note-note" wx:for="{{ item.note }}" wx:for-item="noteItem">{{ noteItem }}</view>
-        </block>
-        <view class="day-note-origin">-{{ item.origin }}</view>
-      </view>
-    </view>
-  </block>
+<view class="page-container">
+  <swiper class="container-swiper" current="{{dayNotes.length - 1}}">
+    <block wx:for="{{dayNotes}}" wx:key="index">
+      <swiper-item class="container-swiper-item">
+        <view class="day-note">
+          <view class="day-note-day">{{ item.day }}</view>
+          <view class="day-note-greetings">
+            <block wx:if="{{ item.idea && item.idea.length }}">
+              <view class="day-note-idea" wx:for="{{ item.idea }}" wx:for-item="ideaItem" wx:key="ideaItem">{{ ideaItem }}</view>
+            </block>
+          </view>
+          <view class="day-note-info">
+            <block wx:if="{{ item.note && item.note.length }}">
+              <view class="day-note-note" wx:for="{{ item.note }}" wx:for-item="noteItem" wx:key="noteItem">{{ noteItem }}</view>
+            </block>
+            <view class="day-note-origin">-{{ item.origin }}</view>
+          </view>
+        </view>
+      </swiper-item>
+    </block>
+  </swiper>
 </view>

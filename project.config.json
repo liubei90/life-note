@@ -23,7 +23,7 @@
     "compileHotReLoad": false,
     "useMultiFrameRuntime": true,
     "useApiHook": true,
-    "useApiHostProcess": false,
+    "useApiHostProcess": true,
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],
@@ -41,8 +41,8 @@
   },
   "compileType": "miniprogram",
   "libVersion": "2.16.1",
-  "appid": "wx5709568a98bd80d3",
-  "projectname": "miniprogram-1",
+  "appid": "wx4cee28f2eb034ac8",
+  "projectname": "life-note",
   "debugOptions": {
     "hidedInDevtools": []
   },
