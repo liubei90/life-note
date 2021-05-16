@@ -1,0 +1,3 @@
+<template name="heading">
+  <view class="heading-{{ item.depth }}">{{ item.text }}</view>
+</template>

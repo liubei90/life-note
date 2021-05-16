@@ -1,0 +1,3 @@
+<template name="text">
+  <text >{{ item.text }}</text>
+</template>

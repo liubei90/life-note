@@ -46,6 +46,13 @@ Page({
     })
   },
 
+  onShareAppMessage() {
+    return {
+      title: '日读笔记',
+      path: '/pages/index/index',
+    }
+  },
+
   processNotes(res) {
     res.forEach((item) => {
       ['note', 'idea'].forEach((name) => {

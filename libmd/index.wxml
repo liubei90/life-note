@@ -1,0 +1,7 @@
+<import src="./templates/index.wxml"></import>
+
+<view wx:if="{{ tokens && tokens.length }}">
+  <block wx:for="{{ tokens }}" wx:key="index">
+    <template is="md" data="{{ item: item }}"></template>
+  </block>
+</view>

@@ -1,0 +1,15 @@
+<import src="./heading.wxml"></import>
+<import src="./link.wxml"></import>
+<import src="./text.wxml"></import>
+<import src="./paragraph.wxml"></import>
+
+<template name="md">
+  <!-- heading -->
+  <template wx:if="{{ item.type == 'heading' }}" is="heading" data="{{ item: item }}"></template>
+  <!-- text -->
+  <template wx:if="{{ item.type == 'text' }}" is="text" data="{{ item: item }}"></template>
+
+  <!-- paragraph -->
+  <template wx:if="{{ item.type == 'paragraph' }}" is="paragraph" data="{{ item: item }}"></template>
+
+</template>
