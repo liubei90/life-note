@@ -1,0 +1,3 @@
+<view class="note-item" wx:if="{{ item }}">
+  <view >{{ item.content }}</view>
+</view>

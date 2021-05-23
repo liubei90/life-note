@@ -8,7 +8,6 @@ const marked = require("marked");
 Page({
   data: {
     dayNotes: [],
-    greetings: '还好吗？',
   },
   // 事件处理函数
   bindViewTap() {
@@ -51,6 +50,16 @@ Page({
       title: '日读笔记',
       path: '/pages/index/index',
     }
+  },
+
+  handleClickDay(e) {
+    const { day } = e.currentTarget.dataset;
+
+    if (!day) return;
+
+    wx.navigateTo({
+      url: '/pages/day/index?day=' + day,
+    });
   },
 
   processNotes(res) {

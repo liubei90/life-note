@@ -2,7 +2,8 @@
   "pages":[
     "pages/index/index",
     "pages/webview/index",
-    "pages/demo/index"
+    "pages/demo/index",
+    "pages/day/index"
   ],
   "window":{
     "backgroundTextStyle":"light",

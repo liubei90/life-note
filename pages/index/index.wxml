@@ -4,7 +4,7 @@
     <block wx:for="{{dayNotes}}" wx:key="index">
       <swiper-item class="container-swiper-item">
         <view class="day-note">
-          <view class="day-note-day">{{ item.day }}</view>
+          <view class="day-note-day" catch:tap="handleClickDay" data-day="{{ item.day }}">{{ item.day }}</view>
           <view class="day-note-greetings">
             <block wx:if="{{ item.idea && item.idea.length }}">
               <view class="day-note-idea" wx:for="{{ item.idea }}" wx:for-item="ideaItem" wx:key="ideaItem">{{ ideaItem }}</view>

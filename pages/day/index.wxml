@@ -1,0 +1,36 @@
+<!--index.wxml-->
+<view class="page-container">
+  <!-- 日历 -->
+  <view class="day-calendar">
+    <calendar-v3 id="calendar" config="{{calendarConfig}}"
+      bind:afterTapDate="handleAfterTapDate"></calendar-v3>
+  </view>
+  <!-- 当天笔记 -->
+  <view class="day-content">
+    <swiper class="dc-swiper" circular="{{true}}" current="{{ current }}"
+      bindtransition="handleTransition" bindanimationfinish="handleAnimationFinish">
+      <swiper-item >
+        <view wx:if="{{ current == 0 && currentNotes && currentNotes.length }}">
+          <note-item wx:for="{{ currentNotes }}" wx:key="index" item="{{ item }}"></note-item>
+        </view>
+        <view wx:elif="{{ current == 0 && currentNotes && !currentNotes.length }}">数据为空</view>
+        <view wx:elif="{{ loading }}">加载中</view>
+      </swiper-item>
+      <swiper-item >
+        <view wx:if="{{ current == 1 && currentNotes && currentNotes.length }}">
+          <note-item wx:for="{{ currentNotes }}" wx:key="index" item="{{ item }}"></note-item>
+        </view>
+        <view wx:elif="{{ current == 1 && currentNotes && !currentNotes.length }}">数据为空</view>
+        <view wx:elif="{{ loading }}">加载中</view>
+      </swiper-item>
+    </swiper>
+  </view>
+</view>
+
+<view class="day-add-note-panel">
+  <view class="day-add-note-field" animation="{{ fieldAnimation }}">
+    <input wx:if="{{ isInAddNote }}" focus="{{ true }}" placeholder="请输入笔记"/>
+  </view>
+  <view class="day-add-note-btn" catch:tap="handleAddNote">{{ isInAddNote ? 'y' : '+' }}</view>
+</view>
+
