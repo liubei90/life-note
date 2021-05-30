@@ -1,3 +1,9 @@
-<view class="note-item" wx:if="{{ item }}">
-  <view >{{ item.content }}</view>
+<view class="note-item" wx:if="{{ item }}" catch:longpress="handleLongPress">
+  <!--  -->
+  <!-- <view class="no-radio {{ item.status == 2 ? 'active' : '' }}"><view class="no-radio-cicle"></view></view> -->
+  <image src="/assets/delete.png" class="no-delete" catch:tap="handleDelete" />
+  <view class="no-content {{ item.status == 2 ? 'active' : '' }}">{{ item.content }}</view>
+  <view class="no-flower" wx:if="{{ item.flower > 0 }}">
+    <image class="no-flower-item" src="/assets/flower{{ item.flower }}.png"></image>
+  </view>
 </view>

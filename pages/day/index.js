@@ -6,7 +6,12 @@ import todo from '../../components/calendar-v3/plugins/todo';
 import flower from '../../components/calendar-v3/plugins/flower';
 import solarLunar from '../../components/calendar-v3/plugins/solarLunar/index';
 import { dateUtil } from '../../components/calendar-v3/utils/index'
-import { wxLogin } from '../../apis/auth';
+const { getNotes,
+  postNote,
+  getNote,
+  putNote,
+  deleteNote, } = require('../../apis/notes');
+const { getScala, getScreenWidth } = require('../../utils/util');
 
 
 plugin.use(todo).use(solarLunar).use(flower);
@@ -28,6 +33,10 @@ Page({
     fieldAnimation: {},
     isInAddNote: false,
     isInAnimation: false,
+    isError: false,
+    inputText: '',
+    delayBlur: false,
+    refreshAnimation: {},
   },
   onLoad(options) {
     console.log('--pages/day/index.onLoad', options);
@@ -48,17 +57,6 @@ Page({
     } else {
       this.getDayNotes(dateUtil.todayFMD());
     }
-
-    this.calendar.setFlowers({
-      dates: [
-        {
-          year: 2021,
-          month: 5,
-          date: 21,
-          flowSrc: '/assets/flower1.png',
-        }
-      ]
-    });
   },
 
   onShareAppMessage() {
@@ -71,7 +69,7 @@ Page({
 
     const { dx, dy } = e.detail;
 
-    this.setData({ dx, dy, loading: true });
+    this.setData({ dx, dy });
   },
 
   handleAnimationFinish(e) {
@@ -89,37 +87,6 @@ Page({
     } else {
       this.jumpPrev();
     }
-  },
-
-  /**
-   * 添加笔记
-   */
-  handleAddNote() {
-    const { isInAnimation, isInAddNote } = this.data;
-    console.log('----pages/day/index.handleAddNote', isInAnimation, isInAddNote);
-
-    if (isInAnimation) return;
-
-    const animation = wx.createAnimation({
-      duration: 300,
-      timingFunction: 'linear',
-    });
-    animation.width( isInAddNote ? 0 : 200).step();
-
-    this.setData({
-      isInAnimation: true,
-    });
-
-    this.setData({
-      fieldAnimation: animation.export(),
-    }, () => {
-      setTimeout(() => {
-        this.setData({
-          isInAddNote: !isInAddNote,
-          isInAnimation: false,
-        });
-      }, 300)
-    })
   },
 
   /**
@@ -152,17 +119,226 @@ Page({
   getDayNotes(day) {
     if (!this.calendar) return;
 
-    // this.setData({ loading: true, });
-
     console.log('----pages/day/index.handleAfterTapDate', day);
 
-    setTimeout(() => {
-      this.setData({ loading: false, currentNotes:  [
-        { content: '这是第一个笔记', status: 1, is_delete: 0, },
-        { content: '这是第二个笔记', status: 1, is_delete: 0, },
-        { content: '这是第三个笔记', status: 1, is_delete: 0, },
-      ] });
-    }, 1000);
+    this.setData({
+      // loading: true,
+      // currentNotes: [],
+    });
+
+    getNotes({ theday: dateUtil.toTimeStr(day) }).then((res) => {
+      this.setData({
+        isError: false,
+        loading: false,
+        currentNotes: res.data,
+      });
+    }).catch((err) => {
+      this.setData({
+        isError: true,
+        loading: false,
+        currentNotes: [],
+      });
+
+      wx.showToast({ title: err && err.msg || '获取数据失败', icon: 'none' });
+    }).finally(() => {
+      this.processFlowers();
+    });
+  },
+
+  /**
+   * 更新当前日期小红花
+   */
+  processFlowers() {
+    const { currentNotes = [] } = this.data;
+    const day = this.calendar.getSelectedDates()[0];
+    let flower = 0;
+
+    if (currentNotes.some(item => item['flower'] == 1)) {
+      flower = 1;
+    }
+
+    if (currentNotes.some(item => item['flower'] == 2)) {
+      flower = 2;
+    }
+
+    if (flower) {
+      this.calendar.setFlowers({
+        dates: [
+          {
+            year: day['year'],
+            month: day['month'],
+            date: day['date'],
+            flowSrc: '/assets/flower' + flower + '.png',
+          }
+        ]
+      });
+    } else {
+      this.calendar.deleteFlowers([
+        {
+          year: day['year'],
+          month: day['month'],
+          date: day['date'],
+        }
+      ]);
+    }
+
+  },
+
+  handleItemChange() {
+    const day = this.calendar.getSelectedDates()[0];
+
+    this.getDayNotes(day);
+  },
+
+  /**
+   * 点击刷新
+   */
+  handleRefresh() {
+    this.setData({
+      refreshAnimation: this.getRefreshAnimation().export(),
+    }, () => {
+      setTimeout(() => {
+        this.setData({
+          refreshAnimation: this.clearRefreshAnimation().export(),
+        });
+      }, 1000);
+    });
+
+    this.handleItemChange();
+  },
+
+  getRefreshAnimation() {
+    const animation = wx.createAnimation({
+      duration: 500,
+      timingFunction: 'linear',
+    });
+    animation.rotate(180).step()
+      .rotate(360).step();
+
+    return animation;
+  },
+
+  clearRefreshAnimation() {
+    const animation = wx.createAnimation({
+      duration: 1,
+      timingFunction: 'step-end',
+    });
+    animation.rotate(0).step();
+
+    return animation;
+  },
+
+  /**
+   * 添加笔记
+   */
+  handleAddNote() {
+    const { inputText, isInAnimation, isInAddNote } = this.data;
+
+    if (isInAnimation) return;
+    console.log('----pages/day/index.handleAddNote', isInAnimation, isInAddNote);
+
+    if (isInAddNote) {
+      if (!String(inputText).trim()) {
+        return;
+      };
+
+      this.setData({
+        delayBlur: true,
+      })
+
+      this.addNote().then(() => {
+        this.handleItemChange();
+        this.toggleNotePanel();
+      });
+    } else {
+      this.toggleNotePanel();
+    }
+  },
+
+  addNote() {
+    let { inputText } = this.data;
+
+    inputText = String(inputText).trim();
+
+    console.log('----pages/day/index.addNote', inputText);
+
+    if (!inputText) {
+      wx.showToast({ title: '请输入内容', icon: 'none' });
+      return Promise.reject();
+    }
+
+    const day = this.calendar.getSelectedDates()[0];
+
+    return postNote({
+      theday: dateUtil.toTimeStr(day),
+      content: inputText,
+    }).then((res) => {
+      wx.showToast({ title: '添加成功', icon: 'none' });
+    }).catch((err) => {
+      wx.showToast({ title: err && err.msg || '添加失败', icon: 'none' });
+      throw err;
+    });
+  },
+
+  toggleNotePanel() {
+    return new Promise((resolve, reject) => {
+      const { inputText, isInAnimation, isInAddNote } = this.data;
+      this.setData({
+        isInAnimation: true,
+        inputText: isInAddNote ? inputText : '',
+      });
+
+      this.setData({
+        fieldAnimation: this.getAnimation(isInAddNote).export(),
+      }, () => {
+        setTimeout(() => {
+          this.setData({
+            isInAddNote: !isInAddNote,
+            isInAnimation: false,
+            delayBlur: false,
+          });
+
+          resolve();
+        }, 300)
+      });
+    });
+  },
+
+  /**
+   * 失去焦点，收起输入框
+   * NOTE: 点击发送按钮导致的blur事件，应该阻止blur事件
+   * 进测算，blur事件执行100+m后才会执行按钮tap事件
+   * 使用touchstart替换tap事件，可以在blur之前执行
+   */
+  handleBlur() {
+    const { delayBlur, inputText, isInAnimation, isInAddNote } = this.data;
+
+    if (isInAnimation) return;
+
+    if (delayBlur) return this.setData({ delayBlur: false, });
+
+    console.log('----pages/day/index.handleBlur');
+
+    this.toggleNotePanel();
+  },
+
+  /**
+   * 接受输入内容
+   */
+  handleInput(e) {
+    this.setData({
+      inputText: e.detail.value,
+    });
+  },
+
+  getAnimation(isInAddNote) {
+    const animation = wx.createAnimation({
+      duration: 300,
+      timingFunction: 'linear',
+    });
+    animation.width(isInAddNote ? 0 : (getScreenWidth() - 80)).step();
+
+    return animation;
   },
 
 })

@@ -10,18 +10,28 @@
     <swiper class="dc-swiper" circular="{{true}}" current="{{ current }}"
       bindtransition="handleTransition" bindanimationfinish="handleAnimationFinish">
       <swiper-item >
-        <view wx:if="{{ current == 0 && currentNotes && currentNotes.length }}">
-          <note-item wx:for="{{ currentNotes }}" wx:key="index" item="{{ item }}"></note-item>
+        <scroll-view wx:if="{{ current == 0 && currentNotes && currentNotes.length }}" scroll-y="{{true}}" style="height: 100%;">
+          <view >
+            <note-item wx:for="{{ currentNotes }}" wx:key="index" item="{{ item }}" bind:item-change="handleItemChange"></note-item>
+          </view>
+        </scroll-view>
+        <view class="dc-loading" wx:elif="{{ current == 0 && currentNotes && !currentNotes.length }}"
+          catch:tap="handleRefresh">
+          <image src="/assets/refresh.png" animation="{{ refreshAnimation }}"/>
+          <view >暂无数据，点击刷新</view>
         </view>
-        <view wx:elif="{{ current == 0 && currentNotes && !currentNotes.length }}">数据为空</view>
-        <view wx:elif="{{ loading }}">加载中</view>
       </swiper-item>
       <swiper-item >
-        <view wx:if="{{ current == 1 && currentNotes && currentNotes.length }}">
-          <note-item wx:for="{{ currentNotes }}" wx:key="index" item="{{ item }}"></note-item>
+        <scroll-view wx:if="{{ current == 1 && currentNotes && currentNotes.length }}" style="height: 100%;">
+          <view >
+            <note-item wx:for="{{ currentNotes }}" wx:key="index" item="{{ item }}" bind:item-change="handleItemChange"></note-item>
+          </view>
+        </scroll-view>
+        <view class="dc-loading" wx:elif="{{ current == 1 && currentNotes && !currentNotes.length }}"
+          catch:tap="handleRefresh">
+          <image src="/assets/refresh.png" animation="{{ refreshAnimation }}"/>
+          <view >暂无数据，点击刷新</view>
         </view>
-        <view wx:elif="{{ current == 1 && currentNotes && !currentNotes.length }}">数据为空</view>
-        <view wx:elif="{{ loading }}">加载中</view>
       </swiper-item>
     </swiper>
   </view>
@@ -29,8 +39,11 @@
 
 <view class="day-add-note-panel">
   <view class="day-add-note-field" animation="{{ fieldAnimation }}">
-    <input wx:if="{{ isInAddNote }}" focus="{{ true }}" placeholder="请输入笔记"/>
+    <input wx:if="{{ isInAddNote }}" focus="{{ true }}" value="{{ inputText }}" bindblur="handleBlur" bindinput="handleInput" placeholder="请输入笔记"/>
   </view>
-  <view class="day-add-note-btn" catch:tap="handleAddNote">{{ isInAddNote ? 'y' : '+' }}</view>
+  <view class="day-add-note-btn" catch:touchstart="handleAddNote">
+    <image class="day-add-note-btn-icon" mode="aspectFill" 
+      src="/assets/{{ isInAddNote ? 'send.png' : 'write.png' }}"></image>
+  </view>
 </view>
 

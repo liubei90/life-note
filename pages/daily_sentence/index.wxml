@@ -1,0 +1,21 @@
+<!--index.wxml-->
+<view class="page-container" bind:tap="handleBlur">
+  <swiper class="container-swiper" circular="{{true}}" current="{{ current }}"
+    bindtransition="handleTransition" bindanimationfinish="handleAnimationFinish" bindchange="handleChange">
+    <swiper-item wx:for="{{ swiperDays }}" wx:key="item" class="container-swiper-item">
+      <view class="day-note">
+        <view class="day-note-day" catch:tap="handleClickDay" data-day="{{ item }}">{{ item }}</view>
+        <view wx:if="{{ !isEdit && dayNotes[item] }}" class="day-note-greetings" catch:tap="handleEditContent" data-content="{{ dayNotes[item].content }}">{{ dayNotes[item].content }}</view>
+        <view wx:elif="{{ isEdit }}" class="day-note-input"  catch:tap="noop">
+          <input value="{{ dayText }}" placeholder="请输入今天的一句" focus="{{ autoFocus }}"
+            bindinput="handleInput"/>
+        </view>
+        <view wx:else class="day-note-empty">
+          <view >
+            <text >点击</text> <image src="/assets/edit.png" catch:tap="handleEditContent" ></image> <text >添加今天的</text><text class="day-note-yiju">一句</text>
+          </view>
+        </view>
+      </view>
+    </swiper-item>
+  </swiper>
+</view>

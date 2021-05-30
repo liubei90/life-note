@@ -1,5 +1,6 @@
 {
   "pages":[
+    "pages/daily_sentence/index",
     "pages/index/index",
     "pages/webview/index",
     "pages/demo/index",

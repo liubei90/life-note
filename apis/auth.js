@@ -1,3 +1,4 @@
+const { storeLoginInfo, getAccessToken } = require('../storage');
 const { api, basicRequest } = require('../api');
 
 
@@ -9,17 +10,19 @@ function wxLogin(code) {
   }).then((res) => {
     // 登录成功
     if (res && res.status == true) {
-      wx.setStorageSync('loginInfo', res.data);
+      storeLoginInfo(res.data);
     } else {
-      wx.removeStorageSync('loginInfo');
+      storeLoginInfo();
     }
 
     return res.data;
   }).catch(() => {
-    wx.removeStorageSync('loginInfo');
+    storeLoginInfo();
     throw Error();
   });
 }
+
+
 
 module.exports = {
   getUserDetail,

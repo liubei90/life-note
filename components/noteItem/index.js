@@ -1,3 +1,5 @@
+const { putNote, deleteNote } = require('../../apis/notes');
+
 
 Component({
   options: {
@@ -16,6 +18,22 @@ Component({
     }
   },
   methods: {
+    handleLongPress() {
+      // flower: 0 无， 1 小红花， 2 太阳花
+      const { id, flower } = this.data.item;
 
+      putNote(id, { flower: (Number(flower) + 1) % 3 }).then(() => {
+        this.triggerEvent('item-change');
+      });
+    },
+    handleDelete() {
+      const { id } = this.data.item;
+
+      wx.showLoading({ title: '删除中', });
+      deleteNote(id).then((res) => {
+        wx.hideLoading();
+        this.triggerEvent('item-change');
+      });
+    },
   }
 })
