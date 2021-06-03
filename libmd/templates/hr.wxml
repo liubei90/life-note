@@ -1,0 +1,3 @@
+<template name="hr">
+  <view class="hr" ></view>
+</template>

@@ -1,0 +1,2 @@
+<view >{{ item.text }}</view>
+<test1 wx:if="{{ item.child }}" item="{{ item.child }}"></test1>

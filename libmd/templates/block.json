@@ -1,0 +1,8 @@
+{
+    "usingComponents": {
+        "md-blockquote": "./blockquote",
+        "md-inline": "./inline",
+        "md-paragraph": "./paragraph",
+        "md-heading": "./heading"
+    }
+}

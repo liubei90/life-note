@@ -1,0 +1,7 @@
+<import src="./inline.wxml"></import>
+
+<template name="del">
+  <view class="del">
+    <template is="inline" data="{{ tokens: item.tokens }}"></template>
+  </view>
+</template>

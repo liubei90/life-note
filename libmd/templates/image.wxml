@@ -1,0 +1,3 @@
+<template name="image">
+  <image class="image" src="{{ item.href }}" data-item="{{ item }}"></image>
+</template>

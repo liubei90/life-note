@@ -1,0 +1,5 @@
+{
+    "usingComponents": {
+        "md-block": "./block"
+    }
+}

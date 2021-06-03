@@ -98,32 +98,32 @@ body > *:last-child {
 }
 
 .heading-1 tt,
-.heading-1 code {
+.heading-1 .code {
   font-size: inherit;
 }
 
 .heading-2 tt,
-.heading-2 code {
+.heading-2 .code {
   font-size: inherit;
 }
 
 .heading-3 tt,
-.heading-3 code {
+.heading-3 .code {
   font-size: inherit;
 }
 
 .heading-4 tt,
-.heading-4 code {
+.heading-4 .code {
   font-size: inherit;
 }
 
 .heading-5 tt,
-.heading-5 code {
+.heading-5 .code {
   font-size: inherit;
 }
 
 .heading-6 tt,
-.heading-6 code {
+.heading-6 .code {
   font-size: inherit;
 }
 
@@ -159,8 +159,24 @@ body > *:last-child {
   color: #777;
 }
 
+.strong {
+  font-weight: bold;
+}
+
+.em {
+  font-style: italic;
+}
+
+.del {
+  text-decoration: line-through;
+}
+
+md-inline view {
+  display: inline;
+}
+
 .paragraph,
-blockquote,
+.blockquote,
 ul,
 ol,
 dl,
@@ -173,8 +189,8 @@ li>ul {
   margin: 0 0;
 }
 
-hr {
-  height: 4px;
+.hr {
+  height: 0;
   padding: 0;
   margin: 16px 0;
   background-color: #e7e7e7;
@@ -245,13 +261,13 @@ ol:last-child {
   margin-bottom: 0;
 }
 
-blockquote {
+.blockquote {
   border-left: 4px solid #dddddd;
   padding: 0 15px;
   color: #777777;
 }
 
-blockquote blockquote {
+.blockquote .blockquote {
   padding-right: 0;
 }
 
@@ -300,7 +316,7 @@ table tr td:last-child {
 }
 
 .md-fences,
-code,
+.code,
 tt {
   border: 1px solid #ddd;
   background-color: #f8f8f8;
@@ -412,7 +428,7 @@ tt {
 }
 
 /** focus mode */
-.on-focus-mode blockquote {
+.on-focus-mode .blockquote {
   border-left-color: rgba(85, 85, 85, 0.12);
 }
 

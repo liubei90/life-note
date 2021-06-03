@@ -1,3 +1,3 @@
 <template name="link">
-  <text class="link" catch:tap="handleLink" data-item="{{ item }}">{{ item.text }}</text>
+  <text class="link" data-item="{{ item }}" bind:tap="handleLink">{{ item.text }}</text>
 </template>

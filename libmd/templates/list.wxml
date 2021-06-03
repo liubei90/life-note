@@ -1,0 +1,7 @@
+<template name="list">
+  <view class="list">{{ item.text }}
+    <!-- <block wx:for="{{ item.tokens }}" wx:key="index" wx:for-item="t">
+        <template is="md" data="{{ item: t }}"></template>
+    </block> -->
+  </view>
+</template>

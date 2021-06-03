@@ -1,0 +1,7 @@
+<import src="./inline.wxml"></import>
+
+<template name="em">
+  <text class="em">
+    <template is="inline" data="{{ tokens: item.tokens }}"></template>
+  </text>
+</template>

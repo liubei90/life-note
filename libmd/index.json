@@ -1,1 +1,5 @@
-{}
+{
+  "usingComponents": {
+    "md-block": "./templates/block"
+  }
+}

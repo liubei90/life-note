@@ -1,0 +1,3 @@
+<template name="table">
+  <view class="table">{{ item.text }}</view>
+</template>

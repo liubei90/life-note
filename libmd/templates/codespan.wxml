@@ -1,0 +1,3 @@
+<template name="codespan">
+  <text >{{ item.text }}</text>
+</template>

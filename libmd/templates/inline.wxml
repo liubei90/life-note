@@ -1,0 +1,17 @@
+<import src="./escape.wxml"></import>
+<import src="./link.wxml"></import>
+<import src="./image.wxml"></import>
+<import src="./codespan.wxml"></import>
+<import src="./br.wxml"></import>
+<import src="./text.wxml"></import>
+
+
+<block wx:for="{{ tokens }}" wx:key="index">
+    <md-front-style wx:if="{{ item.type == 'strong' || item.type == 'del' || item.type == 'em' }}" item="{{ item }}"></md-front-style>
+    <template wx:if="{{ item.type == 'escape' }}" is="escape" data="{{ item: item }}"></template>
+    <template wx:if="{{ item.type == 'link' }}" is="link" data="{{ item: item }}"></template>
+    <template wx:if="{{ item.type == 'image' }}" is="image" data="{{ item: item }}"></template>
+    <template wx:if="{{ item.type == 'codespan' }}" is="codespan" data="{{ item: item }}"></template>
+    <template wx:if="{{ item.type == 'br' }}" is="br" data="{{ item: item }}"></template>
+    <template wx:if="{{ item.type == 'text' }}" is="text" data="{{ item: item }}"></template>
+</block>

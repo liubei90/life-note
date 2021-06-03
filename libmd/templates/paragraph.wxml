@@ -1,18 +1,4 @@
-<import src="./link.wxml"></import>
-<import src="./text.wxml"></import>
-<template name="paragraph">
-  <view class="paragraph">
-    <block wx:if="{{ item.tokens && item.tokens.length }}">
-      <block wx:for="{{ item.tokens }}" wx:for-item="token" wx:key="index">
-        <!-- text -->
-        <template wx:if="{{ token.type == 'text' }}" is="text" data="{{ item: token }}"></template>
-        <!-- link -->
-        <template wx:if="{{ token.type == 'link' }}" is="link" data="{{ item: token }}"></template>
-      </block>
-    </block>
-    <block wx:else>
-      <!-- text -->
-      <template wx:if="{{ item.type == 'text' }}" is="text" data="{{ item: item }}"></template>
-    </block>
-  </view>
-</template>
+
+<view class="paragraph">
+  <md-inline tokens="{{ item.tokens }}"></md-inline>
+</view>

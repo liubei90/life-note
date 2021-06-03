@@ -1,0 +1,19 @@
+<import src="./hr.wxml"></import>
+<import src="./code.wxml"></import>
+<import src="./table.wxml"></import>
+<import src="./blockquote.wxml"></import>
+<import src="./list.wxml"></import>
+<import src="./text.wxml"></import>
+
+
+<block>
+  <!-- {{ item.type }}:[{{ item.raw }}] -->
+  <template wx:if="{{ item.type == 'hr' }}" is="hr" data="{{ item: item }}"></template>
+  <md-heading wx:if="{{ item.type == 'heading' }}" item="{{ item }}"></md-heading>
+  <template wx:if="{{ item.type == 'code' }}" is="code" data="{{ item: item }}"></template>
+  <template wx:if="{{ item.type == 'table' }}" is="table" data="{{ item: item }}"></template>
+  <md-blockquote wx:if="{{ item.type == 'blockquote' }}" item="{{ item }}"></md-blockquote>
+  <template wx:if="{{ item.type == 'list' }}" is="list" data="{{ item: item }}"></template>
+  <md-paragraph wx:if="{{ item.type == 'paragraph' }}" item="{{ item }}"></md-paragraph>
+  <template wx:if="{{ item.type == 'text' }}" is="text" data="{{ item: item }}"></template>
+</block>

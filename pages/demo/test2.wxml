@@ -1,0 +1,7 @@
+
+<import src="./test1.wxml"></import>
+
+<template name="test2">
+    <view >{{ item.text }}</view>
+    <template wx:if="{{ item.child }}" is="test1" data="{{ item: item.child }}"></template>
+</template>

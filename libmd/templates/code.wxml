@@ -1,0 +1,3 @@
+<template name="code">
+  <view class="code">{{ item.text }}</view>
+</template>

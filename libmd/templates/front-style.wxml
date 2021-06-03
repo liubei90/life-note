@@ -1,0 +1,3 @@
+<view class="{{ item.type }}">
+  <md-inline tokens="{{ item.tokens }}"></md-inline>
+</view>

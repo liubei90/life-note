@@ -1,0 +1,6 @@
+
+<view class="blockquote">
+  <block wx:for="{{ item.tokens }}" wx:key="index" wx:for-item="t">
+      <md-block item="{{ t }}"></md-block>
+  </block>
+</view>

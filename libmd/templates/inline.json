@@ -1,0 +1,6 @@
+{
+    "usingComponents": {
+        "md-inline": "./inline",
+        "md-front-style": "./front-style"
+    }
+}
