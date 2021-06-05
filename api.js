@@ -1,5 +1,5 @@
 const { getAccessToken } = require('./storage');
-const lifeNoteDomain = 'https://wx-dev.lbliubei.cn/life0-note';
+const lifeNoteDomain = 'https://wx-dev.lbliubei.cn/life-note';
 const lifeDailySentenceDomain = lifeNoteDomain;
 
 
