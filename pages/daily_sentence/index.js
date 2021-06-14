@@ -11,27 +11,75 @@ const { getDailySentences,
   addDailySentence } = require('../../apis/daily_sentence');
 const { throttle } = require('../../utils/lodash');
 
+
+const mdStr = `
+# 这是一级标题
+## 这是二级标题
+### 这是三级标题
+#### 这是四级标题
+##### 这是五级标题
+###### 这是六级标题
+
+>这是引用的内容
+>>这是引用的内容
+>>>>>>>>>>这是引用的内容
+
+**这是加粗的文字**
+*这是倾斜的文字*
+***这是斜体加粗的文字***
+~~这是加删除线的文字~~
+
+---
+----
+***
+*****
+
+![图片alt](/assets/qinzi_chengzhang@3x.png)
+
+[简书](https://jianshu.com)
+
+- 列表内容
++ 列表内容
+* 列表内容
+
+1. 列表内容
+2. 列表内容
+3. 列表内容
+
+表头|表头|表头
+---|:--:|---:
+内容|内容|内容
+内容|内容|内容
+
+\`代码内容\`
+
+`;
+
+
 Page({
   data: {
     isEdit: false, // 编辑模式
     dayNotes: {},
     dayText: '',
     current: 0,
-    swiperDays: ['', ''],
+    oldCurrent: 0,
+    swiperDays: ['', '', ''],
     dx: 0,
     autoFocus: false,
+    simpleMode: true, // 简洁模式
+    article: mdStr, // 每日一文
   },
 
   onLoad() {
     this.pageInit();
   },
 
-  onShareAppMessage() {
-    return {
-      title: '日读笔记',
-      path: '/pages/daily_sentence/index',
-    }
-  },
+  // onShareAppMessage() {
+  //   return {
+  //     title: '日读笔记',
+  //     path: '/pages/daily_sentence/index',
+  //   }
+  // },
 
   pageInit() {
     wx.showLoading({ title: '加载中' });
@@ -46,6 +94,8 @@ Page({
       this.setData({
         dayNotes,
       });
+    }).catch((res) => {
+      wx.showToast({ title: res && res.msg || '接口错误', icon: 'none', });
     }).finally(() => {
       wx.hideLoading();
     });
@@ -97,6 +147,8 @@ Page({
       content,
     }).then((res) => {
       return this.getDayNote();
+    }).catch((res) => {
+      wx.showToast({ title: res && res.msg || '接口错误', icon: 'none', });
     }).finally(() => {
       this.setData({ isEdit: false, dayText: '', autoFocus: false, });
       wx.hideLoading();
@@ -122,69 +174,56 @@ Page({
     });
   },
 
-  handleTransition: throttle(function(e) {
-    console.log('----daily_sentence.handleTransition', e.detail);
-    this.setData({
-      dx: e.detail.dx,
-    });
-
-    this.toggleSwiper();
-  }, 100, { trailing: false }),
-
-  // handleTransition: function(e) {
-  //   console.log('----daily_sentence.handleTransition', e.detail);
-  //   this.setData({
-  //     dx: e.detail.dx,
-  //   });
-
-  //   this.toggleSwiper();
-  // },
-
-  handleAnimationFinish(e) {
-    console.log('----daily_sentence.handleAnimationFinish', e.detail);
-    if (e.detail.source == 'touch') {
-      this.setData({
-        current: e.detail.current,
-      });
-    }
-  },
-
   handleChange(e) {
     console.log('----daily_sentence.handleChange', e.detail);
+
+    if (e.detail.source == 'touch') {
+      this.setData({
+        oldCurrent: this.data.current,
+        current: e.detail.current,
+      });
+
+      this.toggleSwiper();
+    }
   },
 
   // 滑动swiper的处理
   initSwiper() {
     const { current, swiperDays } = this.data;
 
-    // swiperDays[current] = dateUtil.toTimeStr(dateUtil.todayFMD());
-
     this.setData({ ['swiperDays[' + current + ']']: dateUtil.toTimeStr(dateUtil.todayFMD()) });
   },
 
   toggleSwiper() {
-    const { current, swiperDays } = this.data;
-    const theDay = dateUtil.transformDateRow2Dict(swiperDays[current]);
+    const { current,  oldCurrent, swiperDays } = this.data;
+    const theDay = dateUtil.transformDateRow2Dict(swiperDays[oldCurrent]);
     const dir = this.getDirection();
     let oday = '';
 
-    if (dir == 'right') {
+    if (!dir) return;
+
+    if (dir == 'left') {
       oday = dateUtil.toTimeStr(dateUtil.getPrevDateInfo(theDay));
-    } else if (dir == 'left') {
+    } else if (dir == 'right') {
       oday = dateUtil.toTimeStr(dateUtil.getNextDateInfo(theDay));
     }
 
-    swiperDays[(current + 1) % 2] = oday;
+    swiperDays[current] = oday;
 
     this.setData({ swiperDays });
   },
 
   getDirection() {
-    const { dx } = this.data;
+    const { current, oldCurrent, swiperDays } = this.data;
+    let dir = '';
 
-    return dx == 0 ? 
-              null : 
-              dx > 0 ? 'left' : 'right';
+    if (current > oldCurrent) {
+      dir = (current == (swiperDays.length - 1) && oldCurrent == 0) ? 'left' : 'right';
+    } else if (current < oldCurrent) {
+      dir = (current == 0 && oldCurrent == (swiperDays.length - 1)) ? 'right' : 'left';
+    }
+
+    return dir;
   },
 
 })

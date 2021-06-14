@@ -139,7 +139,7 @@ Page({
         currentNotes: [],
       });
 
-      wx.showToast({ title: err && err.msg || '获取数据失败', icon: 'none' });
+      // wx.showToast({ title: err && err.msg || '获取数据失败', icon: 'none' });
     }).finally(() => {
       this.processFlowers();
     });

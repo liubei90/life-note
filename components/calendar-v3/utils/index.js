@@ -145,13 +145,13 @@ class DateUtil {
   }
   getPrevDateInfo(dateInfo = {}) {
     let { date, month, year } = dateInfo;
-    const mcount = this.getDatesCountOfMonth(year, month);
+    const prevMonthInfo = this.getPrevMonthInfo(dateInfo);
+    const mcount = this.getDatesCountOfMonth(prevMonthInfo.year, prevMonthInfo.month);
 
     date = Number(date) - 1;
-
+    
     // 下个月一号
     if (date < 1) {
-      const prevMonthInfo = this.getPrevMonthInfo(dateInfo);
       prevMonthInfo.date = mcount;
 
       return prevMonthInfo;
@@ -163,13 +163,13 @@ class DateUtil {
   }
   getNextDateInfo(dateInfo = {}) {
     let { date, month, year } = dateInfo;
+    const nextMonthInfo = this.getNextMonthInfo(dateInfo);
     const mcount = this.getDatesCountOfMonth(year, month);
 
     date = Number(date) + 1;
-
+    
     // 下个月一号
     if (date > mcount) {
-      const nextMonthInfo = this.getNextMonthInfo(dateInfo);
       nextMonthInfo.date = 1;
 
       return nextMonthInfo;

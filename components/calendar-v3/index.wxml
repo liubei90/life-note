@@ -19,7 +19,9 @@
       <view class="week fs28" wx:for="{{calendar.weeksCh}}" wx:key="index" data-idx="{{index}}">{{item}}</view>
     </view>
     <!-- 日历面板主体 -->
-    <view class="b lr wrap" bindtouchstart="calendarTouchstart" catchtouchmove="calendarTouchmove" catchtouchend="calendarTouchend">
+    <view class="b lr wrap dates-panel" 
+      bindtouchstart="calendarTouchstart" catchtouchmove="calendarTouchmove" catchtouchend="calendarTouchend">
+      <view class="month-bk"><text >{{ calendar.curMonth }}</text></view>
       <!-- 上月日期格子 -->
       <view class="grid b ac pc {{config.theme}}_prev-month-date" wx:for="{{calendar.prevMonthGrids}}" wx:key="index" data-idx="{{index}}">
         <view class="date-wrap b cc">
