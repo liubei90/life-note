@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "首页",
+  "navigationBarTitleText": "一句",
   "usingComponents": {
     "md": "/libmd/index"
   }

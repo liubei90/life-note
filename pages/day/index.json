@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "首页",
+  "navigationBarTitleText": "送你一朵小红花",
   "usingComponents": {
     "calendar-v3": "/components/calendar-v3/index",
     "note-item": "/components/noteItem/index"

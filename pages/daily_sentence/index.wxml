@@ -1,29 +1,33 @@
 <!--index.wxml-->
-<view class="page-container" bind:tap="handleBlur">
+<view class="page-container" bind:tap="handleBlur" bind:touchmove="bindtouchmove">
   <swiper class="container-swiper" circular="{{true}}" current="{{ current }}"
     bindchange="handleChange">
     <swiper-item wx:for="{{ swiperDays }}" wx:key="item" class="container-swiper-item">
-      <scroll-view class="day-note-scroll" scroll-y="{{true}}">
-        <view class="day-note {{ simpleMode ? 'simple' : '' }}">
-          <!-- 一句 -->
-          <view class="day-sentence">
-            <view class="day-note-day" catch:tap="handleClickDay" data-day="{{ item }}">{{ item }}</view>
-            <view wx:if="{{ !isEdit && dayNotes[item] }}" class="day-note-greetings" catch:tap="handleEditContent" data-content="{{ dayNotes[item].content }}">{{ dayNotes[item].content }}</view>
-            <view wx:elif="{{ isEdit }}" class="day-note-input"  catch:tap="noop">
-              <input value="{{ dayText }}" placeholder="请输入今天的一句" focus="{{ autoFocus }}"
-                bindinput="handleInput"/>
-            </view>
-            <view wx:else class="day-note-empty">
-              <view >
-                <text >点击</text> <image src="/assets/edit.png" catch:tap="handleEditContent" ></image> <text >添加今天的</text><text class="day-note-yiju">一句</text>
-              </view>
+      <view class="day-note" animation="{{ sentenceAnimation }}">
+        <!-- 一句 -->
+        <view class="day-sentence">
+          <view class="day-note-day" catch:tap="handleClickDay" data-day="{{ item }}">{{ item }}</view>
+          <view wx:if="{{ !isEdit && dayNotes[item] }}" class="day-note-greetings" catch:tap="handleEditContent" data-content="{{ dayNotes[item].content }}">{{ dayNotes[item].content }}</view>
+          <view wx:elif="{{ isEdit }}" class="day-note-input"  catch:tap="noop">
+            <input value="{{ dayText }}" placeholder="请输入今天的一句" focus="{{ autoFocus }}"
+              bindinput="handleInput"/>
+          </view>
+          <view wx:else class="day-note-empty">
+            <view >
+              <text >点击</text> <image src="/assets/edit.png" catch:tap="handleEditContent" ></image> <text >添加今天的</text><text class="day-note-yiju"> 一句</text>
             </view>
           </view>
-
-          <!-- 一文 -->
-          <view wx:if="{{ !simpleMode }}" class="day-article">
-            <md md="{{ article }}"></md>
+        </view>
+      </view>
+      <scroll-view class="day-note-scroll" animation="{{ articleAnimation }}" scroll-y="{{true}}" 
+        bindscroll="bindscroll">
+        <!-- 一文 -->
+        <view class="day-article">
+          <view class="day-note-day" catch:tap="handleClickDay" data-day="{{ item }}">{{ item }}</view>
+          <view wx:if="{{ !articles['item'] }}" class="day-note-empty">
+            <text >点击</text> <image src="/assets/add-text-two.png" catch:tap="handleEditArticle" ></image> <text >添加今天的</text><text class="day-note-yiju"> 一章</text>
           </view>
+          <md md="{{ article }}"></md>
         </view>
       </scroll-view>
     </swiper-item>

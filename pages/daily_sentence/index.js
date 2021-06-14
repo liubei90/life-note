@@ -9,7 +9,7 @@ const { getDailySentences,
   putDailySentence,
   deleteDailySentence,
   addDailySentence } = require('../../apis/daily_sentence');
-const { throttle } = require('../../utils/lodash');
+const { throttle, debounce } = require('../../utils/lodash');
 
 
 const mdStr = `
@@ -67,7 +67,17 @@ Page({
     dx: 0,
     autoFocus: false,
     simpleMode: true, // 简洁模式
-    article: mdStr, // 每日一文
+
+
+    articles: {}, // 每日一文
+
+    // scrollTop: 0,
+    // scrollHeight: 0,
+    moveStartY: -1, // 触摸开始
+    moveEndY: -1, // 触摸结束
+
+    sentenceAnimation: {},
+    articleAnimation: {},
   },
 
   onLoad() {
@@ -94,10 +104,10 @@ Page({
       this.setData({
         dayNotes,
       });
-    }).catch((res) => {
-      wx.showToast({ title: res && res.msg || '接口错误', icon: 'none', });
-    }).finally(() => {
       wx.hideLoading();
+    }).catch((res) => {
+      wx.hideLoading();
+      wx.showToast({ title: res && res.msg || '接口错误', icon: 'none', });
     });
 
     this.initSwiper();
@@ -113,6 +123,7 @@ Page({
     });
   },
 
+  // 添加一句
   handleEditContent(e) {
     const { content = '' } = e.currentTarget.dataset;
     this.setData({
@@ -126,6 +137,9 @@ Page({
       }, 300);
     });
   },
+
+  // 添加一章
+  handleEditArticle() {},
 
   handleInput(e) {
     this.setData({
@@ -156,6 +170,63 @@ Page({
 
   },
 
+  // bindscroll({detail: { scrollTop, scrollHeight }}) {
+  //   this.setData({ scrollTop, scrollHeight });
+  // },
+
+  bindtouchmove({ changedTouches }) {
+    if (changedTouches && changedTouches.length) {
+      const { clientX, clientY } = changedTouches[0];
+      const { moveStartY, moveEndY } = this.data;
+
+      if (moveStartY == -1) {
+        this.setData({ moveStartY: clientY });
+      }
+
+      this.setData({ moveEndY: clientY });
+      this.moveEnd();
+    }
+  },
+
+  moveEnd: debounce(function() {
+    console.log('----pages/daily_sentence/index.moveEnd');
+    const { moveStartY, moveEndY } = this.data;
+    const offset = moveEndY - moveStartY;
+
+    this.setData({ moveStartY: -1, moveEndY: -1 });
+
+    if (offset > 20) {
+      this.setData({ simpleMode: true });
+      this.toggleSimpleMode();
+    } else if (offset < -20) {
+      this.setData({ simpleMode: false });
+      this.toggleSimpleMode();
+    }
+  }, 500),
+
+  toggleSimpleMode() {
+    const { simpleMode } = this.data;
+    const sentenceAnimation = wx.createAnimation({});
+    const articleAnimation = wx.createAnimation({});
+
+    if (simpleMode) {
+      sentenceAnimation.top(0).step();
+      articleAnimation.top('100%').step();
+    } else {
+      sentenceAnimation.top('-100%').step();
+      articleAnimation.top(0).step();
+    }
+
+    this.setData({
+      sentenceAnimation: sentenceAnimation.export(),
+      articleAnimation: articleAnimation.export(),
+    });
+
+    setTimeout(() => {
+      wx.setNavigationBarTitle({ title: simpleMode ? '一句' : '一章' });
+    }, 400);
+  },
+
   noop() {},
 
   getDayNote() {
@@ -165,11 +236,11 @@ Page({
     }).then((res) => {
       if (res.data && res.data.length) {
         const daily = res.data[0];
-        const key = 'dayNotes.' + dateUtil.toTimeStr(dateUtil.transformDateRow2Dict(daily['theday']))
+        const key = 'dayNotes.' + dateUtil.toTimeStr(dateUtil.transformDateRow2Dict(daily['theday']));
 
         this.setData({
           [key]: daily,
-        })
+        });
       }
     });
   },
@@ -185,6 +256,8 @@ Page({
 
       this.toggleSwiper();
     }
+
+    this.setData({ isEdit: false });
   },
 
   // 滑动swiper的处理
