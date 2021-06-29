@@ -1,7 +1,9 @@
 {
   "description": "项目配置文件",
   "packOptions": {
-    "ignore": []
+    "ignore": [
+      { "type": "folder", "value": "h5" }
+    ]
   },
   "setting": {
     "urlCheck": false,

@@ -1,0 +1,45 @@
+{
+  "name": "edit-rticle",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "typings": "dist/index.d.ts",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest",
+    "dev": "vite",
+    "build": "vite build",
+    "build:tsc": "vue-tsc --noEmit && vite build",
+    "serve": "vite preview"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.14.5",
+    "@babel/core": "^7.14.6",
+    "@babel/plugin-proposal-class-properties": "^7.14.5",
+    "@babel/plugin-transform-runtime": "^7.14.5",
+    "@babel/preset-env": "^7.14.5",
+    "@babel/preset-typescript": "^7.14.5",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@types/jest": "^26.0.23",
+    "@types/testing-library__jest-dom": "^5.14.0",
+    "@types/vue": "^2.0.0",
+    "@vitejs/plugin-vue": "^1.2.3",
+    "@vue/babel-plugin-jsx": "^1.0.6",
+    "@vue/compiler-sfc": "^3.1.1",
+    "@vue/component-compiler-utils": "^3.2.2",
+    "@vue/test-utils": "^2.0.0-rc.6",
+    "babel-jest": "26.3.0",
+    "jest": "26.6.3",
+    "sass": "^1.35.1",
+    "typescript": "^4.3.3",
+    "vfile-message": "^3.0.1",
+    "vite": "^2.3.7",
+    "vue-jest": "5.0.0-alpha.5",
+    "vue-template-compiler": "^2.6.14",
+    "vue-tsc": "^0.1.7"
+  },
+  "dependencies": {
+    "vditor": "^3.8.5",
+    "vue": "^3.0.5"
+  }
+}
